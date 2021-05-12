@@ -1,0 +1,99 @@
+﻿<Window x:Class="MetPushWorkWithDB.Windows.UsersInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MetPushWorkWithDB.Windows"
+        mc:Ignorable="d"
+        Height="450" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <DataGrid
+            Grid.Row="1"
+            Grid.Column="1"
+            AutoGenerateColumns="False"
+            x:Name="dgUsersInfo"
+            IsReadOnly="True"
+            >
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Id"
+                    Binding="{Binding IdUser}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Имя"
+                    Binding="{Binding FName}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Фамилия"
+                    Binding="{Binding LName}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Отчество"
+                    Binding="{Binding MName}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Пол"
+                    Binding="{Binding Genders.Gender}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Роль"
+                    Binding="{Binding Roles.Role}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Логин"
+                    Binding="{Binding Login}"
+                    >
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Header="Пароль"
+                    Binding="{Binding Password}"
+                    >
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button
+            Grid.Column="1"
+            Grid.Row="3"
+            Width="100"
+            Height="30" 
+            HorizontalAlignment="Left" 
+            Margin="20,0,0,0"
+            Content="Добавить"
+            x:Name="btnAdd" Click="btnAdd_Click"
+            />
+        <Button
+            Grid.Column="1"
+            Grid.Row="3"
+            Width="100"
+            Height="30"
+            Content="Изменить"
+            x:Name="btnChange" Click="btnChange_Click"
+            />
+        <Button
+            Grid.Column="1"
+            Grid.Row="3"
+            Width="100"
+            Height="30"
+            HorizontalAlignment="Right"
+            Margin="0,0,20,0"
+            Content="Удалить"
+            x:Name="btnDelete" Click="btnDelete_Click"
+            />
+    </Grid>
+</Window>
