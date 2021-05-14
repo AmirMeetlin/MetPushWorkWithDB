@@ -162,7 +162,7 @@
                 Width="130"
                 x:Name="cbRole"
                 Foreground="Gray"
-                FontWeight="Bold"      
+                FontWeight="Bold"    
                 >
                 
             </ComboBox>

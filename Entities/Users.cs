@@ -23,6 +23,8 @@ namespace MetPushWorkWithDB.Entities
         public string Login { get; set; }
         public string Password { get; set; }
         public byte[] Photo { get; set; }
+
+        public string FIO { get => "{LName} {FName} {MName}"; }
     
         public virtual Genders Genders { get; set; }
         public virtual Roles Roles { get; set; }

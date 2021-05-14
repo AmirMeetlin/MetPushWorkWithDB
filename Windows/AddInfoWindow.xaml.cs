@@ -192,5 +192,6 @@ namespace MetPushWorkWithDB.Windows
                 imgUsr.Source = new BitmapImage(new Uri(openFile.FileName));
             }
         }
+
     }
 }

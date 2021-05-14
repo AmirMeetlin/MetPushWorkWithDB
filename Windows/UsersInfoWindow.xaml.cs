@@ -20,12 +20,20 @@ namespace MetPushWorkWithDB.Windows
     /// </summary>
     public partial class UsersInfoWindow : Window
     {
+
+        private List<Roles> roles = new List<Roles>();
+
+        private List<Users> usersList = new List<Users>();
         public UsersInfoWindow()
         {
             InitializeComponent();
              
             dgUsersInfo.ItemsSource = Ent.Context.Users.ToList();
-
+            roles = Ent.Context.Roles.ToList();
+            roles.Insert(0, new Roles {Role = "Все роли"});
+            cbSortRole.ItemsSource = roles;
+            cbSortRole.DisplayMemberPath = "Role";
+            cbSortRole.SelectedIndex = 0;
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -47,6 +55,23 @@ namespace MetPushWorkWithDB.Windows
                 return;
             }
         }
+        private void Filter()
+        {
+            usersList = Ent.Context.Users.ToList();
+            if(cbSortRole.SelectedIndex != 0)
+            {
+                usersList = usersList.Where(i => i.IdRole == cbSortRole.SelectedIndex).ToList();
+
+            }
+
+            usersList = usersList.
+                Where(i => i.LName.Contains(tbSearch.Text)
+                || i.FName.Contains(tbSearch.Text)
+                || i.MName.Contains(tbSearch.Text)
+                )
+                .ToList();
+            dgUsersInfo.ItemsSource = usersList;
+        }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -66,6 +91,16 @@ namespace MetPushWorkWithDB.Windows
 
 
             }
+        }
+
+        private void cbSortRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Filter();
+        }
+
+        private void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Filter();
         }
     }
 }

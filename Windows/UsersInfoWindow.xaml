@@ -17,6 +17,42 @@
             <RowDefinition Height="10*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
+        <WrapPanel 
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            >
+            <TextBlock
+                Text="Поиск по ФИО"
+                VerticalAlignment="Center" Margin="40,0,0,0"
+                >
+                
+            </TextBlock>
+            <TextBox
+                x:Name="tbSearch"
+                Width="200"
+                Height="25" 
+                Margin="15,4,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center" TextChanged="tbSearch_TextChanged"
+                >
+            </TextBox>
+            <TextBlock
+                Text="Выбор по роли"
+                VerticalAlignment="Center" Margin="40,0,0,0"
+                >
+            </TextBlock>
+            <ComboBox
+                Margin="10,0,0,0"     
+                VerticalAlignment="Center"
+                FontSize="13"
+                Width="130"
+                x:Name="cbSortRole"
+                Foreground="Gray"
+                FontWeight="Bold" SelectionChanged="cbSortRole_SelectionChanged"     
+                >
+
+            </ComboBox>
+        </WrapPanel>
         <DataGrid
             Grid.Row="1"
             Grid.Column="1"
