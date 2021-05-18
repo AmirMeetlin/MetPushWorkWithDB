@@ -24,6 +24,12 @@ namespace MetPushWorkWithDB.Windows
         private List<Roles> roles = new List<Roles>();
 
         private List<Users> usersList = new List<Users>();
+
+        private int numOfPage ;
+
+        private double countPages;
+
+        private int countRows;
         public UsersInfoWindow()
         {
             InitializeComponent();
@@ -34,6 +40,16 @@ namespace MetPushWorkWithDB.Windows
             cbSortRole.ItemsSource = roles;
             cbSortRole.DisplayMemberPath = "Role";
             cbSortRole.SelectedIndex = 0;
+            cbNumOfRecords.SelectedIndex = 0;
+            numOfRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            numOfPages.Text = "1";
+            numOfTakenPages.Text = "1";
+            btnLeft.Visibility = Visibility.Hidden;
+            btnFirst.Visibility = Visibility.Hidden;
+            btnSecond.Visibility = Visibility.Hidden;
+            btnThird.Visibility = Visibility.Hidden;
+            btnRight.Visibility = Visibility.Hidden;
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -47,6 +63,10 @@ namespace MetPushWorkWithDB.Windows
                     Ent.Context.SaveChanges();
                     dgUsersInfo.ItemsSource = Ent.Context.Users.ToList();
                     MessageBox.Show("Запись успешно удалена","Удаление",MessageBoxButton.OK,MessageBoxImage.Information);
+                    numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+                    cbNumOfRecords.SelectedIndex = 0;
+                    numOfRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+                    countRows = dgUsersInfo.Items.Count;
                 }
                
             }
@@ -70,6 +90,16 @@ namespace MetPushWorkWithDB.Windows
                 || i.MName.Contains(tbSearch.Text)
                 )
                 .ToList();
+
+            
+            
+            dgUsersInfo.ItemsSource = usersList;
+            if (cbNumOfRecords.SelectedIndex != 0)
+            {
+                usersList = usersList.Skip(numOfPage * cbNumOfRecords.SelectedIndex * 15).ToList();
+                usersList = usersList.Take(cbNumOfRecords.SelectedIndex * 15).ToList();
+                
+            }
             dgUsersInfo.ItemsSource = usersList;
         }
 
@@ -79,6 +109,10 @@ namespace MetPushWorkWithDB.Windows
             AddInfoWindow addInfoWindow = new AddInfoWindow();
             addInfoWindow.ShowDialog();
             dgUsersInfo.ItemsSource = Ent.Context.Users.ToList();
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            cbNumOfRecords.SelectedIndex = 0;
+            numOfRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            countRows = dgUsersInfo.Items.Count;
         }
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
@@ -95,12 +129,146 @@ namespace MetPushWorkWithDB.Windows
 
         private void cbSortRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            numOfPage = 0;
+            btnFirst.Content = "1";
+            btnSecond.Content = "2";
+            btnThird.Content = "3";
+            cbNumOfRecords.SelectedIndex = 0;
             Filter();
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            numOfRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            countRows = dgUsersInfo.Items.Count;
         }
 
         private void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            numOfPage = 0;
+            btnFirst.Content = "1";
+            btnSecond.Content = "2";
+            btnThird.Content = "3";
+            cbNumOfRecords.SelectedIndex = 0;
             Filter();
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            numOfRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+            countRows = dgUsersInfo.Items.Count;
+        }
+
+        private void cbNumOfRecords_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+            if (cbNumOfRecords.SelectedIndex == 1)
+            {
+                
+                countPages = Math.Ceiling(Convert.ToDouble( countRows) / (cbNumOfRecords.SelectedIndex * 15));
+                numOfPages.Text = Convert.ToString( countPages);
+                btnLeft.Visibility = Visibility.Visible;
+                btnFirst.Visibility = Visibility.Visible;
+                btnSecond.Visibility = Visibility.Visible;
+                btnThird.Visibility = Visibility.Visible;
+                btnRight.Visibility = Visibility.Visible;
+            }
+            else if (cbNumOfRecords.SelectedIndex == 2)
+            {
+                
+                countPages = Math.Ceiling(Convert.ToDouble(countRows) / (cbNumOfRecords.SelectedIndex * 15));
+                numOfPages.Text = Convert.ToString(countPages);
+                btnLeft.Visibility = Visibility.Visible;
+                btnFirst.Visibility = Visibility.Visible;
+                btnSecond.Visibility = Visibility.Visible;
+                btnThird.Visibility = Visibility.Visible;
+                btnRight.Visibility = Visibility.Visible;
+            }
+            else if (cbNumOfRecords.SelectedIndex == 0)
+            {
+                numOfTakenRecords.Text = numOfRecords.Text;
+                btnLeft.Visibility = Visibility.Hidden;
+                btnFirst.Visibility = Visibility.Hidden;
+                btnSecond.Visibility = Visibility.Hidden;
+                btnThird.Visibility = Visibility.Hidden;
+                btnRight.Visibility = Visibility.Hidden;
+            }
+            
+            numOfPage = 0;
+            btnFirst.Content = "1";
+            btnSecond.Content = "2";
+            btnThird.Content = "3";
+            Filter();
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+        }
+
+        private void btnLeft_Click(object sender, RoutedEventArgs e)
+        {
+            if (numOfPage > 0)
+            {
+                numOfPage -= 1;
+                btnFirst.Content = numOfPage +1;
+                btnSecond.Content = numOfPage + 2;
+                btnThird.Content = numOfPage + 3;
+                Filter();
+            }
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+        }
+
+        private void btnRight_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (numOfPage != countPages - 1)
+            {
+                numOfPage += 1;
+                btnFirst.Content = numOfPage + 1;
+                btnSecond.Content = numOfPage + 2;
+                btnThird.Content = numOfPage + 3;
+                Filter();
+            }
+            else
+            {
+                MessageBox.Show("Листать больше некуда :(", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+        }
+
+        private void btnFirst_Click(object sender, RoutedEventArgs e)
+        {
+            //if(numOfPage != Convert.ToInt32(btnFirst.Content)-1)
+            //{
+            //numOfPage += Convert.ToInt32(btnFirst.Content) - 1;
+            //Filter();
+            //}
+            //numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+        }
+
+        private void btnSecond_Click(object sender, RoutedEventArgs e)
+        {
+            if (numOfPage != countPages - 1)
+            {
+                numOfPage += 1;
+                btnFirst.Content = numOfPage + 1;
+                btnSecond.Content = numOfPage + 2;
+                btnThird.Content = numOfPage + 3;
+                Filter();
+            }
+            else
+            {
+                MessageBox.Show("Листать больше некуда :(", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
+        }
+
+        private void btnThird_Click(object sender, RoutedEventArgs e)
+        {
+            if (numOfPage != countPages - 2)
+            {
+                numOfPage += 2;
+                btnFirst.Content = numOfPage + 1;
+                btnSecond.Content = numOfPage + 2;
+                btnThird.Content = numOfPage + 3;
+                Filter();
+            }
+            else
+            {
+                MessageBox.Show("Листать больше некуда :(", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            numOfTakenRecords.Text = Convert.ToString(dgUsersInfo.Items.Count);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace MetPushWorkWithDB.Entities
 {
     public class Ent
     {
-        public static UserDBEntities Context = new UserDBEntities();
+        public static Entities Context = new Entities();
     }
 }
